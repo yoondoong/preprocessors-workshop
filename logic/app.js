@@ -30,7 +30,6 @@
       initialize: function() {
         this.data.gameOver = false;
         this.setPlayerNames();
-        this.retrieveStats();
         this.assignRoles();
         this.prepareBoard();
         this.updateNotifications();
@@ -39,22 +38,6 @@
       setPlayerNames: function() {
         this.data.player1 = $("input[name='pl-1']").val();
         return this.data.player2 = $("input[name='pl-2']").val();
-      },
-      retrieveStats: function() {
-        this.data.p1stats = localStorage[this.data.player1] || {
-          wins: 0,
-          loses: 0
-        };
-        if (typeof this.data.p1stats === "string") {
-          this.data.p1stats = JSON.parse(this.data.p1stats);
-        }
-        this.data.p2stats = localStorage[this.data.player2] || {
-          wins: 0,
-          loses: 0
-        };
-        if (typeof this.data.p2stats === "string") {
-          return this.data.p2stats = JSON.parse(this.data.p2stats);
-        }
       },
       getPlayerName: function(symbol) {
         var name;
@@ -102,7 +85,7 @@
             Tic.data.turns++;
             Tic.checkEnd();
             if (Tic.data.gameOver !== true && $(".moved").length >= 9) {
-              return Tic.addToScore("none");
+              return Tic.checkTie("none");
             }
           }
         });
@@ -164,7 +147,7 @@
             modal.style.display = "block";
             this.showAlert((this.getPlayerName("X")) + " wins");
             this.data.gameOver = true;
-            this.addToScore("X");
+            this.checkTie("X");
           }
         }
         ref1 = this.data.o;
@@ -177,33 +160,20 @@
             modal.style.display = "block";
             this.showAlert((this.getPlayerName("O")) + " wins");
             this.data.gameOver = true;
-            results.push(this.addToScore("O"));
+            results.push(this.checkTie("O"));
           } else {
             results.push(void 0);
           }
         }
         return results;
       },
-      addToScore: function(winningParty) {
+      checkTie: function(winner) {
         this.data.turns = 0;
         this.data.x = {};
         this.data.o = {};
         this.data.gameOver = true;
-        if (winningParty === "none") {
+        if (winner === "none") {
           this.showAlert("The game was a tie");
-        } else {
-          if (this.data.rolep1 === winningParty) {
-            ++this.data.p1stats.wins;
-          } else {
-            ++this.data.p1stats.loses;
-          }
-          if (this.data.rolep2 === winningParty) {
-            ++this.data.p2stats.wins;
-          } else {
-            ++this.data.p2stats.loses;
-          }
-          localStorage[this.data.player1] = JSON.stringify(this.data.p1stats);
-          localStorage[this.data.player2] = JSON.stringify(this.data.p2stats);
         }
         this.updateNotifications();
         return $(".notifications").append("<a class='play-again'>Play Again?</a>");

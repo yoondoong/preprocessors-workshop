@@ -20,7 +20,6 @@ $ ->
     initialize: ->
       @data.gameOver = false
       @setPlayerNames()
-      @retrieveStats()
       @assignRoles()
       @prepareBoard()
       @updateNotifications()
@@ -29,12 +28,6 @@ $ ->
     setPlayerNames: ->
       @data.player1 = $("input[name='pl-1']").val()
       @data.player2 = $("input[name='pl-2']").val()
-
-    retrieveStats: ->
-      @data.p1stats = localStorage[@data.player1] || wins: 0, loses: 0
-      if typeof @data.p1stats is "string" then @data.p1stats = JSON.parse @data.p1stats
-      @data.p2stats = localStorage[@data.player2] || wins: 0, loses: 0
-      if typeof @data.p2stats is "string" then @data.p2stats = JSON.parse @data.p2stats
 
     getPlayerName: (symbol) ->
       name = if @data.rolep1 == symbol then @data.player1 else @data.player2
@@ -67,7 +60,7 @@ $ ->
           else if Tic.data.turns % 2 isnt 0 then $(@).html("O").addClass("o moved")
           Tic.data.turns++
           Tic.checkEnd()
-          if Tic.data.gameOver isnt yes and $(".moved").length >= 9 then Tic.addToScore("none")
+          if Tic.data.gameOver isnt yes and $(".moved").length >= 9 then Tic.checkTie("none")
 
     checkEnd : ->
       @data.x = {}
@@ -111,7 +104,7 @@ $ ->
           modal.style.display = "block";
           @showAlert "#{@getPlayerName("X")} wins"
           @data.gameOver = true
-          @addToScore("X")
+          @checkTie("X")
       for key,value of @data.o
         if value >= 3
           localStorage.o++
@@ -119,20 +112,15 @@ $ ->
           modal.style.display = "block";
           @showAlert "#{@getPlayerName("O")} wins"
           @data.gameOver = true
-          @addToScore("O")
+          @checkTie("O")
 
-    addToScore: (winningParty) ->
+    checkTie: (winner) ->
       @data.turns = 0
       @data.x = {}
       @data.o = {}
       @data.gameOver = yes
-      if winningParty is "none"
+      if winner is "none"
         @showAlert "The game was a tie"
-      else
-        if @data.rolep1 == winningParty then ++@data.p1stats.wins else ++@data.p1stats.loses
-        if @data.rolep2 == winningParty then ++@data.p2stats.wins else ++@data.p2stats.loses
-        localStorage[@data.player1] = JSON.stringify @data.p1stats
-        localStorage[@data.player2] = JSON.stringify @data.p2stats
       @updateNotifications()
       $(".notifications").append "<a class='play-again'>Play Again?</a>"
 
