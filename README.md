@@ -29,6 +29,8 @@ Now, you should have the base code for the game we are going to make!  Some part
 ## Setting up Flow
 Instead of doing its own thing, Flow works on top of existing ecosystems.  In our case, we'll have it work in conjunction with Babel, as Babel will take Flow code and strip out *type annotations*.  
 
+We won't be doing too much with Flow other than setting it up (it works with vanilla JS, so integration with CoffeeScript would require messing with the output JS after compilation.)
+
 ## Getting started with CoffeeScript
 It's pretty easy to install CoffeeScript: `npm install -g coffee-script` will get you the latest edition.  Run the command `coffee -v` to check your download.  Good?  Let's go!
 
