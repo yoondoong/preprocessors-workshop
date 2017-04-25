@@ -48,3 +48,4 @@ At this point you should have ...
 - [ ] Understand how these programs work the way they do!
 
 ## Credits
+Tic-tac-toe modified from http://www.sitepoint.com/practical-coffeescript-tic-tac-toe
