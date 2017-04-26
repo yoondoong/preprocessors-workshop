@@ -39,8 +39,58 @@ CoffeeScript files have the extension of `.coffee` and compile into `.js`.
 #### Cool Commands
 `coffee -o javascripts/ -c coffeescripts/` will compile all the files in the folder 'coffeescripts' and output them into a folder 'javascripts'.  **Don't switch the order of -o and -c!**
 
-
 ## Tic-Tac-Toe Game
+
+In the `logic` folder, you will see a file named `app.coffee`.  This holds a great deal of code that has already been created, but you will be filling in the blanks that are indicated by comments!  You will be editing this file, but in the HTML `index.html` in the root folder, **link** instead to the `app.js` file it compiles.
+
+:rocket: At the very end of the  `<body>`, right before the closing tags, paste: <br>
+`<script src="logic/app.js"></script>`.
+
+### Now, let's initiate our game.  
+
+:rocket: Find the comment that says `#Insert initialization code here`.  You will be pasting the following code at that location: <br>
+``
+
+What are we doing? **[To be written]**
+
+How will we decide which player goes first?  Let's write a function to do that.  The following code will be familiar, but a lot shorter than we would write in JS!
+
+:rocket: Find the comment that says `#Insert function to decide who goes first`.  You will be pasting the following code at that location: <br>
+
+
+What does that code do? **[To be written]**
+
+### Now, let's give our players the ability to make some moves.
+
+:rocket: Find the comment that says `#Insert script to make moves`.  You will be pasting the following code at that location: <br>
+
+How does the function work? **[To be written]**
+
+### Now, let's see if a player has won.
+
+In a Tic-Tac-Toe game, you can win by getting three horizontally, vertically, or diagonally.  We will have several functions, each checking for a completion of one of the three.  If any of these has been reached by either player, the game ends and a winning message is displayed.
+
+:rocket: Find the comment that says `#Insert checkEnd here!`. You will be pasting the following code at that location: <br>
+
+What's going on here?  **[To be written]**
+
+### One more thing... the Modal!
+
+Let's get that winning message to pop up!  
+
+:rocket: Find the comment that says `#Insert modal content here`. You will be pasting the following code at that location: <br>
+
+What is this code doing? **[To be written]**
+
+### Just kidding - let's get that CoffeeScript into JS!
+
+Save your file.  Now, run the following command to compile:
+
+`coffee -c logic/app.coffee`
+
+You should now see a `app.js` file in your `logic` folder.  Your other files will be using that product when deploying your site.
+
+Now, deploy your hard work.   Congratulations on making your first (?) CoffeeScript Tic-Tac-Toe game!
 
 ## And You're Done!
 At this point you should have ...
