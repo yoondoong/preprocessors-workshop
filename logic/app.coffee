@@ -1,14 +1,3 @@
-modal = document.getElementById('myModal');
-btn = document.getElementById("myBtn");
-span = document.getElementsByClassName("close")[0];
-
-span.onclick = ->
-  modal.style.display = "none";
-
-window.onclick = (event) ->
-  if event.target == modal
-    modal.style.display = "none";
-
 $ ->
   Tic =
     data:
@@ -17,6 +6,7 @@ $ ->
       o: {}
       gameOver: false
 
+    #Insert initialization code here
     initialize: ->
       @data.gameOver = false
       @setPlayerNames()
@@ -40,6 +30,7 @@ $ ->
       $(".alerts").text("#{@getPlayerName("X")} Goes First")
       $("<div>", {class: "square"}).appendTo("#board") for square in [0..8]
 
+    #Insert function to decide who goes first
     assignRoles: ->
       roles = ["X","O"].sort(->
         return 0.5 - Math.random()
@@ -47,6 +38,7 @@ $ ->
       @data.rolep1 = roles[0]
       @data.rolep2 = roles[1]
 
+    #Insert script to make moves
     updateNotifications: ->
       $(".notifications").empty().show()
 
@@ -62,6 +54,7 @@ $ ->
           Tic.checkEnd()
           if Tic.data.gameOver isnt yes and $(".moved").length >= 9 then Tic.checkTie("none")
 
+    #Insert checkEnd here!
     checkEnd : ->
       @data.x = {}
       @data.o = {}
@@ -102,7 +95,6 @@ $ ->
           localStorage.x++
           $('#won').text("#{@getPlayerName("X")} wins")
           modal.style.display = "block";
-          @showAlert "#{@getPlayerName("X")} wins"
           @data.gameOver = true
           @checkTie("X")
       for key,value of @data.o
@@ -110,7 +102,6 @@ $ ->
           localStorage.o++
           $('#won').text("#{@getPlayerName("O")} wins")
           modal.style.display = "block";
-          @showAlert "#{@getPlayerName("O")} wins"
           @data.gameOver = true
           @checkTie("O")
 
@@ -120,7 +111,8 @@ $ ->
       @data.o = {}
       @data.gameOver = yes
       if winner is "none"
-        @showAlert "The game was a tie"
+        $('#won').text("It's a tie!")
+        modal.style.display = "block";
       @updateNotifications()
       $(".notifications").append "<a class='play-again'>Play Again?</a>"
 
@@ -131,6 +123,7 @@ $ ->
     showAlert: (msg) ->
       $(".alerts").text(msg).slideDown()
 
+  #Insert form scripts here
   $("form").on "submit", (evt) ->
     evt.preventDefault()
     $inputs = $("input[type='text']")
@@ -146,3 +139,15 @@ $ ->
     else Tic.initialize()
 
   $("body").on("click",".play-again", -> Tic.initialize())
+
+  #Insert modal content here
+  modal = document.getElementById('myModal');
+  btn = document.getElementById("myBtn");
+  span = document.getElementsByClassName("close")[0];
+
+  span.onclick = ->
+    modal.style.display = "none";
+
+  window.onclick = (event) ->
+    if event.target == modal
+      modal.style.display = "none";
