@@ -1,14 +1,3 @@
-modal = document.getElementById('myModal');
-btn = document.getElementById("myBtn");
-span = document.getElementsByClassName("close")[0];
-
-span.onclick = ->
-  modal.style.display = "none";
-
-window.onclick = (event) ->
-  if event.target == modal
-    modal.style.display = "none";
-
 $ ->
   Tic =
     data:
@@ -17,10 +6,10 @@ $ ->
       o: {}
       gameOver: false
 
+    #Insert initialization code here
     initialize: ->
       @data.gameOver = false
       @setPlayerNames()
-      @retrieveStats()
       @assignRoles()
       @prepareBoard()
       @updateNotifications()
@@ -29,12 +18,6 @@ $ ->
     setPlayerNames: ->
       @data.player1 = $("input[name='pl-1']").val()
       @data.player2 = $("input[name='pl-2']").val()
-
-    retrieveStats: ->
-      @data.p1stats = localStorage[@data.player1] || wins: 0, loses: 0
-      if typeof @data.p1stats is "string" then @data.p1stats = JSON.parse @data.p1stats
-      @data.p2stats = localStorage[@data.player2] || wins: 0, loses: 0
-      if typeof @data.p2stats is "string" then @data.p2stats = JSON.parse @data.p2stats
 
     getPlayerName: (symbol) ->
       name = if @data.rolep1 == symbol then @data.player1 else @data.player2
@@ -47,6 +30,7 @@ $ ->
       $(".alerts").text("#{@getPlayerName("X")} Goes First")
       $("<div>", {class: "square"}).appendTo("#board") for square in [0..8]
 
+    #Insert function to decide who goes first
     assignRoles: ->
       roles = ["X","O"].sort(->
         return 0.5 - Math.random()
@@ -54,6 +38,7 @@ $ ->
       @data.rolep1 = roles[0]
       @data.rolep2 = roles[1]
 
+    #Insert script to make moves
     updateNotifications: ->
       $(".notifications").empty().show()
 
@@ -67,8 +52,9 @@ $ ->
           else if Tic.data.turns % 2 isnt 0 then $(@).html("O").addClass("o moved")
           Tic.data.turns++
           Tic.checkEnd()
-          if Tic.data.gameOver isnt yes and $(".moved").length >= 9 then Tic.addToScore("none")
+          if Tic.data.gameOver isnt yes and $(".moved").length >= 9 then Tic.checkTie("none")
 
+    #Insert checkEnd here!
     checkEnd : ->
       @data.x = {}
       @data.o = {}
@@ -109,30 +95,24 @@ $ ->
           localStorage.x++
           $('#won').text("#{@getPlayerName("X")} wins")
           modal.style.display = "block";
-          @showAlert "#{@getPlayerName("X")} wins"
           @data.gameOver = true
-          @addToScore("X")
+          @checkTie("X")
       for key,value of @data.o
         if value >= 3
           localStorage.o++
           $('#won').text("#{@getPlayerName("O")} wins")
           modal.style.display = "block";
-          @showAlert "#{@getPlayerName("O")} wins"
           @data.gameOver = true
-          @addToScore("O")
+          @checkTie("O")
 
-    addToScore: (winningParty) ->
+    checkTie: (winner) ->
       @data.turns = 0
       @data.x = {}
       @data.o = {}
       @data.gameOver = yes
-      if winningParty is "none"
-        @showAlert "The game was a tie"
-      else
-        if @data.rolep1 == winningParty then ++@data.p1stats.wins else ++@data.p1stats.loses
-        if @data.rolep2 == winningParty then ++@data.p2stats.wins else ++@data.p2stats.loses
-        localStorage[@data.player1] = JSON.stringify @data.p1stats
-        localStorage[@data.player2] = JSON.stringify @data.p2stats
+      if winner is "none"
+        $('#won').text("It's a tie!")
+        modal.style.display = "block";
       @updateNotifications()
       $(".notifications").append "<a class='play-again'>Play Again?</a>"
 
@@ -143,6 +123,7 @@ $ ->
     showAlert: (msg) ->
       $(".alerts").text(msg).slideDown()
 
+  #Insert form scripts here
   $("form").on "submit", (evt) ->
     evt.preventDefault()
     $inputs = $("input[type='text']")
@@ -158,3 +139,15 @@ $ ->
     else Tic.initialize()
 
   $("body").on("click",".play-again", -> Tic.initialize())
+
+  #Insert modal content here
+  modal = document.getElementById('myModal');
+  btn = document.getElementById("myBtn");
+  span = document.getElementsByClassName("close")[0];
+
+  span.onclick = ->
+    modal.style.display = "none";
+
+  window.onclick = (event) ->
+    if event.target == modal
+      modal.style.display = "none";
