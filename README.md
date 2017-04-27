@@ -19,7 +19,7 @@ Preprocessors are programs that takes in data and outputs it into a form that ca
 
 *Flow* uses data flow analysis to :running: follow :running: you in your code writing, pointing out errors as you go.  Like your parents, but more helpful! :information_desk_person:  
 
-It works incrementally, meaning you can add it file-by-file instead of jumping right into the deep end of the pool.  
+It works incrementally, meaning you can add it file-by-file instead of jumping right into the deep end of the pool.  We won't be doing much with it for this interactive portion of our workshop, but check it out and see if it will help you in your own coding!
 
 ## Clone the Repo!
 To start off, clone this repo - you should already know how to do that, but if not, just `git clone [HTTPS for this repo.]`
@@ -31,7 +31,10 @@ It's pretty easy to install CoffeeScript: `npm install -g coffee-script` will ge
 
 CoffeeScript files have the extension of `.coffee` and compile into `.js`.  
 
-#### Cool Commands
+#### Cool Command
+
+You don't need this in this workshop (more for bigger projects and organization) but something to keep in mind:
+
 `coffee -o javascripts/ -c coffeescripts/` will compile all the files in the folder 'coffeescripts' and output them into a folder 'javascripts'.  **Don't switch the order of -o and -c!**
 
 ## Tic-Tac-Toe Game
