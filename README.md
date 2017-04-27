@@ -49,22 +49,69 @@ In the `logic` folder, you will see a file named `app.coffee`.  This holds a gre
 ### Now, let's initiate our game.  
 
 :rocket: Find the comment that says `#Insert initialization code here`.  You will be pasting the following code at that location: <br>
-``
 
-What are we doing? **[To be written]**
+```
+initialize: ->
+  @data.gameOver = false
+  @setPlayerNames()
+  @assignRoles()
+  @prepareBoard()
+  @updateNotifications()
+  @addListeners()
+```
+
+What are we doing? The equivalent JavaScript is:
+
+```
+initialize: function() {
+  this.data.gameOver = false;
+  this.setPlayerNames();
+  this.assignRoles();
+  this.prepareBoard();
+  this.updateNotifications();
+  return this.addListeners();
+},
+```
+
+Notice that the general structure of the CoffeeScript is the same as VanillaJS, but eliminates a lot of the verbose syntax such as semicolons and braces. In addition, note that in coffee, "->" replaces "function()" and "@" replaces "this."
 
 How will we decide which player goes first?  Let's write a function to do that.  The following code will be familiar, but a lot shorter than we would write in JS!
 
 :rocket: Find the comment that says `#Insert function to decide who goes first`.  You will be pasting the following code at that location: <br>
 
+```
+assignRoles: ->
+  roles = ["X","O"].sort(->
+    return 0.5 - Math.random()
+  )
+  @data.rolep1 = roles[0]
+  @data.rolep2 = roles[1]
+```
 
-What does that code do? **[To be written]**
+Let's compile our code to see where we are at! Run the following command in terminal: `coffee -c logic/app.coffee`
+
+You should get the following image when you start it up with `python -m SimpleHTTPServer 9000`:
+
+![](images/progress.png)
+
 
 ### Now, let's give our players the ability to make some moves.
 
 :rocket: Find the comment that says `#Insert script to make moves`.  You will be pasting the following code at that location: <br>
 
-How does the function work? **[To be written]**
+```
+addListeners: ->
+  $(".square").click ->
+    if Tic.data.gameOver is no and not $(@).text().length
+      if Tic.data.turns % 2 is 0 then $(@).html("X").addClass("x moved")
+      else if Tic.data.turns % 2 isnt 0 then $(@).html("O").addClass("o moved")
+      Tic.data.turns++
+      Tic.checkEnd()
+      if Tic.data.gameOver isnt yes and $(".moved").length >= 9 then Tic.checkTie("none")
+```
+Note that this method is significantly more simple than the JS equivalent. This is primarily due to the conditional keywords "is", "and", "not", "then".
+
+Compile the code again and you should be able to see the game update as you make moves!
 
 ### Now, let's see if a player has won.
 
@@ -72,7 +119,37 @@ In a Tic-Tac-Toe game, you can win by getting three horizontally, vertically, or
 
 :rocket: Find the comment that says `#Insert checkEnd here!`. You will be pasting the following code at that location: <br>
 
-What's going on here?  **[To be written]**
+```
+checkEnd : ->
+  @data.x = {}
+  @data.o = {}
+
+  #diagonal check
+  diagonals = [[0,4,8], [2,4,6]]
+  for diagonal in diagonals
+     for col in diagonal
+       @checkField(col, 'diagonal')
+     @checkWin()
+     @emptyStorageVar('diagonal')
+  for row in [0..2]
+    start = row * 3
+    end = (row * 3) + 2
+    middle = (row * 3) + 1
+
+    #vertical check
+    @checkField(start, 'start')
+    @checkField(middle, 'middle')
+    @checkField(end, 'end')
+    @checkWin()
+
+    # horizontal check
+    for column in [start..end]
+      @checkField(column, 'horizontal')
+    @checkWin()
+    @emptyStorageVar('horizontal')
+```
+
+What's going on here?  First of all, note that variable definition are a lot easier in CoffeeScript. Also note that for loops are simplified and uses ".." to indicate a range of values.
 
 ### One more thing... the Modal!
 
@@ -80,17 +157,20 @@ Let's get that winning message to pop up!
 
 :rocket: Find the comment that says `#Insert modal content here`. You will be pasting the following code at that location: <br>
 
-What is this code doing? **[To be written]**
+```
+modal = document.getElementById('myModal')
+btn = document.getElementById("myBtn")
+span = document.getElementsByClassName("close")[0]
 
-### Just kidding - let's get that CoffeeScript into JS!
+span.onclick = ->
+  modal.style.display = "none"
 
-Save your file.  Now, run the following command to compile:
+window.onclick = (event) ->
+  if event.target == modal
+    modal.style.display = "none"
+```
 
-`coffee -c logic/app.coffee`
-
-You should now see a `app.js` file in your `logic` folder.  Your other files will be using that product when deploying your site.
-
-Now, deploy your hard work.   Congratulations on making your first (?) CoffeeScript Tic-Tac-Toe game!
+And that's it! Feel free to take it one step further and use jQuery for the last step. Compile one last time, and then deploy your hard work. Congratulations on making your first (?) CoffeeScript Tic-Tac-Toe game!
 
 ## And You're Done!
 At this point you should have ...
